@@ -28,8 +28,8 @@ const pageData = {
     {
       id: "duo",
       title: "Two",
-      navImage: "./img/glass.png",
-      bgImage: "./img/glass.png"
+      navImage: "./img/yellow.jpg",
+      bgImage: "./img/yellow.jpg"
     },
     {
       id: "tria",
