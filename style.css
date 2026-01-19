@@ -1,0 +1,382 @@
+/* ===============================
+   CUSTOM PROPERTIES (CSS Variables)
+   Centralized values for easy theming
+   =============================== */
+:root {
+  --nav-border-color: rgba(252, 185, 0, 0.4);
+  --nav-border-active: rgba(252, 185, 0, 1);
+  --nav-bg: rgba(255, 255, 255, 0.1);
+  --overlay-dark: rgba(0, 0, 0, 0.3);
+  --overlay-darker: rgba(0, 0, 0, 0.6);
+  --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --nav-size-desktop: 55px;
+  --nav-size-mobile: 45px;
+  --nav-gap-desktop: 0.75rem;
+  --nav-gap-mobile: 0.5rem;
+}
+
+/* ===============================
+   GLOBAL RESET & BASE STYLES
+   =============================== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  /* Smooth scrolling for anchor links */
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #000;
+  color: #fff;
+  overflow-x: hidden;
+  /* Prevent text selection on navigation items */
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+/* ======================================================
+   CINEMATIC BACKGROUND LAYER
+   EN: Spatial layer independent from sections
+   EL: Χωρικό layer ανεξάρτητο από τα sections
+   ====================================================== */
+
+#bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* EN: Cinematic smooth transition
+     EL: Κινηματογραφική ομαλή μετάβαση */
+  transition:
+    opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ======================================================
+   SECTION ADJUSTMENTS
+   EN: Sections no longer carry background images
+   EL: Τα sections δεν κουβαλάνε background εικόνες
+   ====================================================== */
+
+section {
+  background: transparent !important;
+}
+
+
+/* ===============================
+   NAVIGATION BAR
+   =============================== */
+nav {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  padding: 0.75rem 1rem;
+  background: var(--nav-bg);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px); /* Safari/iOS */
+  border-radius: 0 0 1.5rem 1.5rem;
+  transition: transform 0.4s var(--transition-smooth);
+  max-width: 95vw;
+  /* Ensure nav doesn't cause layout shift */
+  will-change: transform;
+}
+
+/* Hidden state when scrolling down */
+nav.hidden {
+  transform: translateX(-50%) translateY(-100%);
+}
+
+.nav-items {
+  display: flex;
+  gap: var(--nav-gap-desktop);
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap; /* Allow wrapping on very small screens */
+}
+
+/* ===============================
+   NAVIGATION ITEMS
+   =============================== */
+.nav-item {
+  width: var(--nav-size-desktop);
+  height: var(--nav-size-desktop);
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  border: 2px solid var(--nav-border-color);
+  transition: all 0.3s ease;
+  /* Optimize rendering performance */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Hover effect */
+.nav-item:hover {
+  border-color: var(--nav-border-active);
+  transform: scale(1.08);
+}
+
+/* Active state (current section) */
+.nav-item.active {
+  border-color: var(--nav-border-active);
+  border-width: 3px;
+  transform: scale(1.15);
+  box-shadow: 0 0 20px rgba(252, 185, 0, 0.5);
+}
+
+/* Keyboard focus state */
+.nav-item:focus-visible {
+  outline: 3px solid var(--nav-border-active);
+  outline-offset: 3px;
+  border-color: var(--nav-border-active);
+}
+
+/* Navigation item images */
+.nav-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  /* Smooth image loading */
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Fallback for broken images */
+.nav-item img[src=""],
+.nav-item img:not([src]) {
+  opacity: 0.3;
+  background: var(--overlay-darker);
+}
+
+/* Label overlay */
+.nav-item .label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--overlay-darker);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none; /* Don't block clicks */
+}
+
+/* Show label on hover or when active */
+.nav-item:hover .label,
+.nav-item.active .label {
+  opacity: 1;
+}
+
+/* ===============================
+   SECTIONS
+   =============================== */
+section {
+  height: 100vh;
+  min-height: 100vh; /* Ensure full height on all devices */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Parallax effect */
+  position: relative;
+  /* Smooth background loading */
+  background-color: #000;
+}
+
+/* Dark overlay for better text contrast */
+section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--overlay-dark);
+  pointer-events: none;
+}
+
+/* Section title */
+section h2 {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(2rem, 8vw, 4rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 0 1rem;
+  letter-spacing: 0.05em;
+  text-shadow: 
+    0 2px 10px rgba(0, 0, 0, 0.8),
+    0 4px 20px rgba(0, 0, 0, 0.6);
+  /* Prevent text selection */
+  user-select: none;
+}
+
+/* ===============================
+   ACCESSIBILITY
+   =============================== */
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  html {
+    scroll-behavior: auto;
+  }
+  
+  section {
+    background-attachment: scroll;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .nav-item {
+    border-width: 3px;
+  }
+  
+  .nav-item.active {
+    border-width: 4px;
+  }
+  
+  section::before {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+
+/* Tablets and smaller laptops */
+@media (max-width: 1024px) {
+  /* Disable parallax on tablets for better performance */
+  section {
+    background-attachment: scroll;
+  }
+  
+  nav {
+    padding: 0.6rem 0.8rem;
+  }
+}
+
+/* Mobile landscape */
+@media (max-height: 600px) and (orientation: landscape) {
+  nav {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .nav-item {
+    width: 40px;
+    height: 40px;
+  }
+  
+  section h2 {
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
+  }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+  :root {
+    --nav-size-desktop: 50px;
+  }
+  
+  nav {
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .nav-items {
+    gap: 0.6rem;
+  }
+  
+  section h2 {
+    font-size: clamp(1.75rem, 7vw, 3rem);
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .nav-item {
+    width: var(--nav-size-mobile);
+    height: var(--nav-size-mobile);
+    border-width: 2px;
+  }
+  
+  .nav-item.active {
+    border-width: 3px;
+  }
+  
+  .nav-items {
+    gap: var(--nav-gap-mobile);
+  }
+  
+  .nav-item .label {
+    font-size: 0.6rem;
+  }
+  
+  nav {
+    border-radius: 0 0 1rem 1rem;
+  }
+}
+
+/* Very small devices (320px) */
+@media (max-width: 380px) {
+  .nav-item {
+    width: 42px;
+    height: 42px;
+  }
+  
+  .nav-items {
+    gap: 0.4rem;
+  }
+  
+  nav {
+    padding: 0.5rem 0.6rem;
+  }
+}
+
+/* ===============================
+   PRINT STYLES
+   =============================== */
+@media print {
+  nav {
+    display: none;
+  }
+  
+  section {
+    page-break-inside: avoid;
+    height: auto;
+    min-height: 0;
+  }
+  
+  section::before {
+    display: none;
+  }
+}
